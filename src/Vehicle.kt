@@ -6,7 +6,7 @@ abstract class Vehicle(
     var currentKilometers: Float,
 ) {
 
-    open val performance = calculatePerformance() // Esta variable me ahorra muchísimo código
+    open val performance = calculatePerformance() // Este atributo me ahorra muchísimo código
 
 
     /** Calcula la cantidad de kilómetros por litro de combustible que es capaz de recorrer el vehículo
