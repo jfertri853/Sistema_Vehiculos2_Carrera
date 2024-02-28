@@ -8,19 +8,45 @@ class Automobile(
     private var britishCondition: Boolean
 ): Vehicle(brand, model, fuelCapacity, currentFuel, currentKilometers) {
 
-    override val performance = calculatePerformance()
-
-
-    /** Calcula la cantidad de kilómetros por litro de combustible que es capaz de recorrer el automóvil teniendo en
-     * cuenta si es híbrido o no
+    /** Calcula la autonomía total del automóvil teniendo en cuenta si es híbrido o no
      *
-     * @return cantidad de kilómetros por litro de combustible
+     * @return kilómetros de autonomía totales de este automóvil
      */
-    override fun calculatePerformance(): Float {
+    override fun calculateTotalRange(): Float {
         return if (isHybrid) {
-            15.0f
+            fuelCapacity * (KM_PER_LITER + 5.0f)
         } else {
-            super.calculatePerformance()
+            super.calculateTotalRange()
+        }
+
+    }
+
+
+    /** Calcula la autonomía actual del automóvil teniendo en cuenta si es híbrido o no
+     *
+     * @return kilómetors de autonomía restante de este automóvil
+     */
+    override fun calculateCurrentRange(): Float {
+        return if (isHybrid) {
+            currentFuel * (KM_PER_LITER + 5.0f)
+        } else {
+            super.calculateCurrentRange()
+        }
+
+    }
+
+
+    /** Calcula el combustible que gasta este automóvil en recorrer una distancia teniendo en cuenta si es híbrido o no
+     *
+     * @param distance distancia recorrida en kilómetros
+     *
+     * @return litros de combustible gastados
+     */
+    override fun calculateSpentFuel(distance: Float): Float {
+        return if (isHybrid) {
+            distance / (KM_PER_LITER + 5.0f)
+        } else {
+            super.calculateSpentFuel(distance)
         }
 
     }
@@ -48,7 +74,6 @@ class Automobile(
 
         return currentFuel
     }
-
 
 
 }

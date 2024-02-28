@@ -6,15 +6,8 @@ abstract class Vehicle(
     var currentKilometers: Float,
 ) {
 
-    open val performance = calculatePerformance() // Este atributo me ahorra muchísimo código
-
-
-    /** Calcula la cantidad de kilómetros por litro de combustible que es capaz de recorrer el vehículo
-     *
-     * @return cantidad de kilómetros por litro de combustible
-     */
-    open fun calculatePerformance(): Float {
-        return 10.0f
+    companion object {
+        const val KM_PER_LITER = 10.0f
     }
 
 
@@ -23,7 +16,7 @@ abstract class Vehicle(
      * @return kilómetros de autonomía totales de este vehículo
      */
     open fun calculateTotalRange(): Float {
-        return (fuelCapacity * performance)
+        return (fuelCapacity * KM_PER_LITER)
     }
 
 
@@ -32,7 +25,18 @@ abstract class Vehicle(
      * @return kilómetors de autonomía restante de este vehículo
      */
     open fun calculateCurrentRange(): Float {
-        return (currentFuel * performance)
+        return (currentFuel * KM_PER_LITER)
+    }
+
+
+    /** Calcula el combustible que gasta este vehículo en recorrer una distancia
+     *
+     * @param distance distancia recorrida en kilómetros
+     *
+     * @return litros de combustible gastados
+     */
+    open fun calculateSpentFuel(distance: Float): Float {
+        return (distance / KM_PER_LITER)
     }
 
 
@@ -66,10 +70,9 @@ abstract class Vehicle(
             remainingDistance = 0.0f
         }
 
-        currentKilometers += traveledDistance
+        currentFuel -= calculateSpentFuel(traveledDistance)
 
-        val spentFuel = traveledDistance / performance
-        currentFuel -= spentFuel
+        currentKilometers += traveledDistance
 
         return remainingDistance
     }

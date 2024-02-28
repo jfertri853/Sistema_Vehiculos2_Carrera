@@ -7,9 +7,6 @@ class Motorcycle(
     private val cubicCapacity: Int,
 ): Vehicle(brand, model, fuelCapacity, currentFuel, currentKilometers) {
 
-    override val performance = calculatePerformance()
-
-
     init {
         verifyCubicCapacity(cubicCapacity)
     }
@@ -21,14 +18,33 @@ class Motorcycle(
     }
 
 
-    /** Calcula la cantidad de kilómetros por litro de combustible que es capaz de recorrer la moto teniendo
-     * en cuenta su cilindrada
+    /** Calcula la autonomía total de la motocicleta según su cilindrada
      *
-     * @return cantidad de kilómetros por litro de combustible
+     * @return kilómetros de autonomía totales de esta motocicleta
      */
-    override fun calculatePerformance(): Float {
-        return 20.0f - (1 - (cubicCapacity.toFloat() / 1000.0f))
+    override fun calculateTotalRange(): Float {
+        return (fuelCapacity * (KM_PER_LITER * 2)) - (1 - (cubicCapacity.toFloat() / 1000.0f))
+    }
 
+
+    /** Calcula la autonomía actual de la motocicleta según su cilindrada
+     *
+     * @return kilómetros de autonomía actuales de esta motocicleta
+     */
+    override fun calculateCurrentRange(): Float {
+        return (currentFuel * (KM_PER_LITER * 2)) - (1 - (cubicCapacity.toFloat() / 1000.0f))
+    }
+
+
+    /** Calcula el combustible que gasta esta motocicleta en recorrer una distancia según su cilindrada
+     *
+     * @param distance distancia recorrida en kilómetros
+     *
+     * @return litros de combustible gastados
+     */
+    override fun calculateSpentFuel(distance: Float): Float {
+        val kmPerLiter = (KM_PER_LITER * 2) - (1 - (cubicCapacity.toFloat() / 1000.0f))
+        return distance / (kmPerLiter)
     }
 
 
